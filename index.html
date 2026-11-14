@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#12161c" />
+  <title>わくわくの実 厳選管理</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="app">
+    <header class="header">
+      <div class="header-title">
+        <p class="eyebrow">Monster Strike</p>
+        <h1>わくわくの実 厳選管理</h1>
+      </div>
+      <nav class="tabs" aria-label="画面切り替え">
+        <button type="button" class="tab is-active" data-tab="list" aria-selected="true">一覧</button>
+        <button type="button" class="tab" data-tab="done" aria-selected="false">厳選済</button>
+        <button type="button" class="tab" data-tab="add" aria-selected="false">追加</button>
+        <button type="button" class="tab" data-tab="settings" aria-selected="false">設定</button>
+      </nav>
+    </header>
+
+    <p id="banner" class="banner" hidden></p>
+
+    <main>
+      <section id="panel-list" data-panel="list">
+        <div class="toolbar">
+          <input id="search-input" class="field" type="search" placeholder="キャラ名で検索" aria-label="キャラ名で検索" />
+          <select id="account-filter" class="field" aria-label="アカウントで絞り込み">
+            <option value="">すべてのアカウント</option>
+          </select>
+          <button type="button" id="move-done-btn" class="btn btn-primary">厳選済を移動</button>
+        </div>
+        <p id="list-count" class="count"></p>
+        <div id="card-grid" class="card-grid"></div>
+      </section>
+
+      <section id="panel-done" data-panel="done" hidden>
+        <div class="toolbar">
+          <input id="done-search-input" class="field" type="search" placeholder="キャラ名で検索" aria-label="厳選済キャラ名で検索" />
+          <select id="done-account-filter" class="field" aria-label="厳選済をアカウントで絞り込み">
+            <option value="">すべてのアカウント</option>
+          </select>
+        </div>
+        <p id="done-count" class="count"></p>
+        <div id="done-grid" class="card-grid"></div>
+      </section>
+
+      <section id="panel-add" data-panel="add" hidden>
+        <form id="add-form" class="panel-card">
+          <label class="label" for="char-name">キャラ名</label>
+          <input id="char-name" class="field" type="text" name="name" maxlength="80" required placeholder="例: ルシファー" />
+
+          <label class="label" for="account-select">アカウント</label>
+          <select id="account-select" class="field" name="account" required></select>
+
+          <div class="bulk-box">
+            <p class="label">わくわくの実の一括設定</p>
+            <div class="bulk-row">
+              <select id="bulk-fruit" class="field" aria-label="一括設定するわくわくの実"></select>
+              <button type="button" id="bulk-apply-btn" class="btn btn-ghost">一括セット</button>
+            </div>
+            <p class="hint">選んだ実を4枠すべてにセットします。候補は設定画面で選べます。</p>
+          </div>
+
+          <div class="fruit-fields">
+            <label class="label" for="fruit-0">1つ目の実</label>
+            <select id="fruit-0" class="field fruit-select"></select>
+            <label class="label" for="fruit-1">2つ目の実</label>
+            <select id="fruit-1" class="field fruit-select"></select>
+            <label class="label" for="fruit-2">3つ目の実</label>
+            <select id="fruit-2" class="field fruit-select"></select>
+            <label class="label" for="fruit-3">4つ目の実</label>
+            <select id="fruit-3" class="field fruit-select"></select>
+          </div>
+
+          <p id="add-message" class="message" role="status"></p>
+          <button type="submit" class="btn btn-primary btn-block">追加する</button>
+        </form>
+      </section>
+
+      <section id="panel-settings" data-panel="settings" hidden>
+        <div class="panel-card">
+          <h2>アカウント</h2>
+          <p class="hint">追加画面のアカウントプルダウンに表示します。</p>
+          <div class="inline-form">
+            <input id="account-input" class="field" type="text" maxlength="40" placeholder="アカウント名" aria-label="アカウント名" />
+            <button type="button" id="account-add-btn" class="btn btn-ghost">追加</button>
+          </div>
+          <ul id="account-list" class="chip-list"></ul>
+        </div>
+
+        <div class="panel-card">
+          <h2>一括設定するわくわくの実</h2>
+          <p class="hint">チェックした実だけが、追加画面の一括設定プルダウンに出ます。</p>
+          <div class="settings-actions">
+            <button type="button" id="bulk-default-btn" class="btn btn-ghost">おすすめを選択</button>
+            <button type="button" id="bulk-clear-btn" class="btn btn-ghost">すべて解除</button>
+          </div>
+          <div id="bulk-options" class="check-grid"></div>
+          <p id="settings-message" class="message" role="status"></p>
+          <button type="button" id="save-settings-btn" class="btn btn-primary">設定を保存</button>
+        </div>
+
+        <details class="panel-card rules">
+          <summary>Firebase の準備</summary>
+          <p class="hint"><code>script.js</code> 先頭の <code>firebaseConfig</code> を、Firebase コンソールのウェブアプリ設定に差し替えてください。Firestore を有効にし、テスト用なら次のルールを使えます。</p>
+          <pre id="rules-text">rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /{document=**} {
+      allow read, write: if true;
+    }
+  }
+}</pre>
+        </details>
+      </section>
+    </main>
+  </div>
+
+  <script type="module" src="script.js"></script>
+</body>
+</html>
